@@ -23,6 +23,15 @@
 
     public bool TakeDamage(BigNumber dmg, out BigNumber reward)
     {
+        currentHitPoints = currentHitPoints - dmg;
+
+        if (currentHitPoints < new BigNumber("1"))
+        {
+            isDead = true;
+            currentHitPoints = new BigNumber("0");
+            reward = goldReward;
+            return true;
+        }
 
         reward = new BigNumber("0");
         return false;

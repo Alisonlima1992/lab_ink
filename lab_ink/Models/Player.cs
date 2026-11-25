@@ -38,6 +38,7 @@
         lvl++;
         damage = damage * damageModifier;
         upgradeCost = upgradeCost * (upgradeModifier * lvl);
+
         return true;
     }
 

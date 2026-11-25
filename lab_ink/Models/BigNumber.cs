@@ -135,29 +135,64 @@ public class BigNumber
 
     private BigNumber Multiply(double multiplier)
     {
-        long mult = (long)Math.Round(multiplier);
+        if (double.IsNaN(multiplier) ||
+            double.IsInfinity(multiplier) ||
+            multiplier <= 0)
+        {
+            return new BigNumber("0");
+        }
+
+        long mult = (long)Math.Round(
+            multiplier * 1000,
+            MidpointRounding.AwayFromZero
+        );
+
         if (mult <= 0)
             return new BigNumber("0");
 
-        int[] result = new int[number.Length + 5];
+        int[] result = new int[number.Length + 10];
         long carry = 0;
 
         for (int i = 0; i < number.Length; i++)
         {
             long prod = (long)number[i] * mult + carry;
+
             result[i] = (int)(prod % Base);
             carry = prod / Base;
         }
 
         int pos = number.Length;
+
         while (carry > 0)
         {
             result[pos++] = (int)(carry % Base);
             carry /= Base;
         }
 
+        BigNumber product = new BigNumber(result);
+
+        return (product + new BigNumber("500")) / 1000.0;
+    }
+
+    private BigNumber Divide(double divisor)
+    {
+        long div = (long)Math.Round(divisor);
+        if (div == 0) throw new DivideByZeroException();
+
+        int[] result = new int[number.Length];
+        long remainder = 0;
+
+        for (int i = number.Length - 1; i >= 0; i--)
+        {
+            long current = remainder * Base + number[i];
+            result[i] = (int)(current / div);
+            remainder = current % div;
+        }
+
         return new BigNumber(result);
     }
+
+    public static BigNumber operator /(BigNumber a, double b) => a.Divide(b);
 
     public static BigNumber operator +(BigNumber a, BigNumber b) => a.Add(b);
     public static BigNumber operator -(BigNumber a, BigNumber b) => a.Substract(b);

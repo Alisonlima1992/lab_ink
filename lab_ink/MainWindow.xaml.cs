@@ -20,8 +20,8 @@ namespace Clicker
 
         private void SpawnNewEnemy()
         {
-            int hp = 20 + enemyNumber * 15;
-            int gold = 8 + enemyNumber * 5;
+            int hp = 25 + enemyNumber * 18;
+            int gold = 10 + enemyNumber * 6;
 
             enemy = new Enemy("Bird " + enemyNumber, hp.ToString(), gold.ToString());
             enemyNumber++;
@@ -57,6 +57,7 @@ namespace Clicker
         {
             if (player.TryUpgrade())
             {
+                
             }
             else
             {
